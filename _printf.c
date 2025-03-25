@@ -1,46 +1,66 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdarg.h>
+#include "main.h"
 
 /**
- * _printf - Custom implementation of printf function.
- * @format: Format string containing the characters and specifiers.
- *
- * Return: Number of characters printed.
+ * _printf - Produces output according to a format
+ * @format: The format string
+ * Return: Number of characters printed
  */
 int _printf(const char *format, ...)
 {
-	va_list a;
-	int i, counter;
-	char c;
+	va_list args;
+	int i = 0, count = 0;
+	char *str;
 
-	counter = 0;
-	va_start(a, format);
-	for (i = 0; format[i]; i++)
+	if (format == NULL)
+		return (-1);
+
+	va_start(args, format);
+
+	while (format[i])
 	{
-		if (format[i] == '%' && format[i + 1] != '\0' &&
-		    format[i + 1] != 'c' && format[i + 1] != '%')
-			continue;
-
-		if (format[i] == '%' && format[i + 1] == 'c')
+		if (format[i] == '%')
 		{
-			c = va_arg(a, int);
-			write(1, &c, 1);
-			counter++;
 			i++;
-		}
-		else if (format[i] == '%' && format[i + 1] == '%')
-		{
-			write(1, &format[i], 1);
-			counter++;
-			i++;
+			if (!format[i])
+				return (-1);
+			if (format[i] == 'c')
+			{
+				char c = va_arg(args, int);
+				write(1, &c, 1);
+				count++;
+			}
+			else if (format[i] == 's')
+			{
+				str = va_arg(args, char *);
+				if (!str)
+					str = "(null)";
+				while (*str)
+				{
+					write(1, str++, 1);
+					count++;
+				}
+			}
+			else if (format[i] == '%')
+			{
+				write(1, "%", 1);
+				count++;
+			}
+			else
+			{
+				write(1, "%", 1);
+				write(1, &format[i], 1);
+				count += 2;
+			}
 		}
 		else
 		{
 			write(1, &format[i], 1);
-			counter++;
+			count++;
 		}
+		i++;
 	}
-	va_end(a);
-	return (counter);
+
+	va_end(args);
+	return (count);
 }
+
