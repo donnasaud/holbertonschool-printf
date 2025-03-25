@@ -2,7 +2,7 @@
 
 /**
  * print_string - Prints a string
- * @args: Argument list
+ * @args: The argument list
  * Return: Number of characters printed
  */
 int print_string(va_list args)
@@ -18,7 +18,6 @@ int print_string(va_list args)
 		write(1, str++, 1);
 		count++;
 	}
-
 	return (count);
 }
 

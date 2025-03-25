@@ -1,6 +1,31 @@
 #include "main.h"
 
 /**
+ * handle_format - Handles format specifiers
+ * @format: The format character
+ * @args: The argument list
+ * Return: Number of characters printed
+ */
+int handle_format(char format, va_list args)
+{
+	if (format == 'c')
+		return (print_char(args));
+	else if (format == 's')
+		return (print_string(args));
+	else if (format == '%')
+	{
+		write(1, "%", 1);
+		return (1);
+	}
+	else
+	{
+		write(1, "%", 1);
+		write(1, &format, 1);
+		return (2);
+	}
+}
+
+/**
  * _printf - Produces output according to a format
  * @format: The format string
  * Return: Number of characters printed
@@ -22,22 +47,7 @@ int _printf(const char *format, ...)
 			i++;
 			if (!format[i])
 				return (-1);
-
-			if (format[i] == 'c')
-				count += print_char(args);
-			else if (format[i] == 's')
-				count += print_string(args);
-			else if (format[i] == '%')
-			{
-				write(1, "%", 1);
-				count++;
-			}
-			else
-			{
-				write(1, "%", 1);
-				write(1, &format[i], 1);
-				count += 2;
-			}
+			count += handle_format(format[i], args);
 		}
 		else
 		{
