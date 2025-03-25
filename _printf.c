@@ -10,6 +10,7 @@ int _printf(const char *format, ...)
 	va_list args;
 	int i = 0, count = 0;
 	char *str;
+	char c;
 
 	if (format == NULL)
 		return (-1);
@@ -25,7 +26,7 @@ int _printf(const char *format, ...)
 				return (-1);
 			if (format[i] == 'c')
 			{
-				char c = va_arg(args, int);
+				c = va_arg(args, int);
 				write(1, &c, 1);
 				count++;
 			}
