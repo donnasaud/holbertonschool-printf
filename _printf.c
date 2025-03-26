@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdarg.h>
-#include "main.h"
 
 /**
  * print_char - Prints a character.
@@ -37,64 +36,8 @@ int print_string(va_list args)
 }
 
 /**
- * print_number - Prints an integer.
- * @args: Argument list containing the integer to print.
- *
- * Return: Number of characters printed.
- */
-int print_number(va_list args)
-{
-    int num = va_arg(args, int);
-    char buffer[20];
-    int i = 0, count = 0;
-    unsigned int n;
-
-    if (num < 0)
-    {
-        write(1, "-", 1);
-        count++;
-        n = -num;
-    }
-    else
-        n = num;
-
-    do {
-        buffer[i++] = (n % 10) + '0';
-        n /= 10;
-    } while (n > 0);
-
-    while (i--)
-        count += write(1, &buffer[i], 1);
-
-    return (count);
-}
-/**
- * handle_format - Handles format specifiers
- * @format: The format character
- * @args: The argument list
- * Return: Number of characters printed
- */
-int handle_format(char format, va_list args)
-{
-    if (format == 'c')
-        return (print_char(args));
-    else if (format == 's')
-        return (print_string(args));
-    else if (format == 'd' || format == 'i')
-        return (print_number(args));
-    else if (format == '%')
-    {
-        write(1, "%", 1);
-        return (1);
-    }
-    else
-    {
-        write(1, "%", 1);
-        write(1, &format, 1);
-        return (2);
-    }
-}
-/**                                                              * _printf - Custom implementation of printf function.           * @format: Format string containing the characters and specifiers.
+ * _printf - Custom implementation of printf function.
+ * @format: Format string containing the characters and specifiers.
  *
  * Return: Number of characters printed.
  */
