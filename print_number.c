@@ -11,6 +11,11 @@ int num = va_arg(args, int);
 char buffer[20];
 int i = 0, count = 0;
 unsigned int n;
+if (num == INT_MIN)
+{
+write(1, "-2147483648", 11);
+return (11);
+}
 if (num < 0)
 {
 write(1, "-", 1);

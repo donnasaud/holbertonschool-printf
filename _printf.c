@@ -17,7 +17,8 @@ int handle_format(char format, va_list args)
 		write(1, "%", 1);
 		return (1);
 	}
-	else
+	else if (format == 'd' || format == 'i')
+		return (print_number(args));
 	{
 		write(1, "%", 1);
 		write(1, &format, 1);
