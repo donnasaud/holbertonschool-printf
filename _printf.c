@@ -1,61 +1,79 @@
-#include "main.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <stdarg.h>
 
 /**
- * handle_format - Handles format specifiers
- * @format: The format character
- * @args: The argument list
- * Return: Number of characters printed
+ * print_char - Prints a character.
+ * @args: Argument list containing the character to print.
+ *
+ * Return: Number of characters printed.
  */
-int handle_format(char format, va_list args)
+int print_char(va_list args)
 {
-        if (format == 'c')
-                return (print_char(args));
-        else if (format == 's')
-                return (print_string(args));
-        else if (format == '%')
-        {
-                write(1, "%", 1);
-                return (1);
-        }
-        else
-        {
-                write(1, "%", 1);
-                write(1, &format, 1);
-                return (2);
-        }
+	char c = va_arg(args, int);
+
+	return (write(1, &c, 1));
 }
 
 /**
- * _printf - Produces output according to a format
- * @format: The format string
- * Return: Number of characters printed
- */int _printf(const char *format, ...)
+ * print_string - Prints a string.
+ * @args: Argument list containing the string to print.
+ *
+ * Return: Number of characters printed.
+ */
+int print_string(va_list args)
 {
-        va_list args;
-        int i = 0, count = 0;
+	char *str = va_arg(args, char *);
+	int counter = 0;
 
-        if (!format)
-                return (-1);
+	if (!str)
+		str = "(null)";
 
-        va_start(args, format);
+	while (*str)
+		counter += write(1, str++, 1);
 
-        while (format[i])
-        {
-                if (format[i] == '%')
-                {
-                        i++;
-                        if (!format[i])
-                                return (-1);
-                        count += handle_format(format[i], args);
-                }
-                else
-                {
-                        write(1, &format[i], 1);
-                        count++;
-                }
-                i++;
-        }
+	return (counter);
+}
 
-        va_end(args);
-        return (count);
-} 
+/**
+ * _printf - Custom implementation of printf function.
+ * @format: Format string containing the characters and specifiers.
+ *
+ * Return: Number of characters printed.
+ */
+int _printf(const char *format, ...)
+{
+	va_list args;
+	int i, counter = 0;
+
+	if (!format)
+		return (-1);
+
+	va_start(args, format);
+
+	for (i = 0; format[i]; i++)
+	{
+		if (format[i] == '%')
+		{
+			if (format[i + 1] == '\0')
+				return (-1);
+			if (format[i + 1] == 'c')
+				counter += print_char(args);
+			else if (format[i + 1] == 's')
+				counter += print_string(args);
+			else if (format[i + 1] == '%')
+				counter += write(1, "%", 1);
+			else
+			{
+				counter += write(1, "%", 1);
+				counter += write(1, &format[i + 1], 1);
+			}
+			i++;
+		}
+		else
+			counter += write(1, &format[i], 1);
+	}
+
+	va_end(args);
+	return (counter);
+}
