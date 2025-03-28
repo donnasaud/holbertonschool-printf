@@ -1,0 +1,43 @@
+.TH _PRINTF 3 "March 2025" "Holberton School" "Library Functions Manual"
+.SH NAME
+_printf \- produces output according to a format
+.SH SYNOPSIS
+.B #include "main.h"
+
+.BI "int _printf(const char *" format ", ...);"
+.SH DESCRIPTION
+The
+.B _printf()
+function produces output according to a format string that specifies how subsequent arguments are converted for output.
+
+It supports the following format specifiers:
+
+.TP
+.B %c
+Prints a single character.
+
+.TP
+.B %s
+Prints a string.
+
+.TP
+.B %%
+Prints a literal percent sign.
+
+.TP
+.B %d, %i
+Prints a signed decimal integer.
+
+.SH RETURN VALUE
+Returns the number of characters printed (excluding the null byte).
+
+.SH BUGS
+This version does not handle:
+flags, field width, precision, or length modifiers.
+
+.SH AUTHOR
+Holberton School students.
+
+.SH SEE ALSO
+.BR printf (3)
+
